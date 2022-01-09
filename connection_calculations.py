@@ -1,3 +1,5 @@
+import time
+
 def comparison(code1, code2, code_length=4, color_count=6):
     count1 = [0] * color_count
     count2 = [0] * color_count
@@ -27,3 +29,27 @@ def compute_relationships(code_length=4, color_count=6):
         for j in range(idx):
             all_relations[idx][j] = comparison(code, all_codes[j], code_length, color_count)
     return all_relations
+
+def minimax_structure(code_length=4, color_count=6):
+    relationship_array = compute_relationships(code_length, color_count)
+    code_relations = [{} for i in range(len(relationship_array))]
+
+    for i, code_set in enumerate(relationship_array):
+        code_relations[i][(color_count, 0)] = [i] # all black <==> code compared with self
+        for j, result in enumerate(code_set):
+            if result in code_relations[i]:
+                code_relations[i][result].append(j)
+            else:
+                code_relations[i][result]=[j]
+
+            if result in code_relations[j]:
+                code_relations[j][result].append(i)
+            else:
+                code_relations[j][result]=[i]
+    return code_relations
+
+if __name__ == "__main__":
+    start = time.time()
+    structure = minimax_structure()
+    end = time.time()
+    print(end-start)
