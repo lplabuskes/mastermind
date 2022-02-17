@@ -10,7 +10,7 @@ def comparison(code1, code2, code_length=4, color_count=6):
         if code1[i] == code2[i]:
             black_count += 1
     white_count = sum([ min(count1[i], count2[i]) for i in range(color_count) ]) - black_count
-    return (black_count, white_count)
+    return f"{black_count}-{white_count}"
 
 def possible_codes(code_length=4, color_count=6):
     codes = [[]]
@@ -35,7 +35,7 @@ def minimax_structure(code_length=4, color_count=6):
     code_relations = [{} for i in range(len(relationship_array))]
 
     for i, code_set in enumerate(relationship_array):
-        code_relations[i][(color_count, 0)] = [i] # all black <==> code compared with self
+        code_relations[i][f"{color_count}-0"] = [i] # all black <==> code compared with self
         for j, result in enumerate(code_set):
             if result in code_relations[i]:
                 code_relations[i][result].append(j)
