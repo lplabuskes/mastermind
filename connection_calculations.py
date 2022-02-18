@@ -31,6 +31,8 @@ def compute_relationships(code_length=4, color_count=6):
     return all_relations
 
 def minimax_structure(code_length=4, color_count=6):
+    # Structure is a list of dictionaries, one dictionary for each code
+    # Keys of the dictioary are possible responses and values are a list of possible codes that would give that response
     relationship_array = compute_relationships(code_length, color_count)
     code_relations = [{} for i in range(len(relationship_array))]
 
