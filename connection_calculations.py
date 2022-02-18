@@ -37,7 +37,7 @@ def minimax_structure(code_length=4, color_count=6):
     code_relations = [{} for i in range(len(relationship_array))]
 
     for i, code_set in enumerate(relationship_array):
-        code_relations[i][f"{color_count}-0"] = [i] # all black <==> code compared with self
+        code_relations[i][f"{code_length}-0"] = [i] # all black <==> code compared with self
         for j, result in enumerate(code_set):
             if result in code_relations[i]:
                 code_relations[i][result].append(j)
@@ -51,7 +51,5 @@ def minimax_structure(code_length=4, color_count=6):
     return code_relations
 
 if __name__ == "__main__":
-    start = time.time()
-    structure = minimax_structure()
-    end = time.time()
-    print(end-start)
+    code = [0 , 0, 0, 0]
+    print(comparison(code, code))
