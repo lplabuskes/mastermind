@@ -62,12 +62,40 @@ class Agent:
         # Remove the code's entry
         entry = self.search_structure[code_num]
         for key in entry:
+            if key == f"{self.code_length}-0":
+                continue
             for possibility in entry[key]:
                 self.search_structure[possibility][key].remove(code_num)
                 if len(self.search_structure[possibility][key]) == 0:
                     self.search_structure[possibility].pop(key)
         self.search_structure[code_num]=None
 
+    def num_to_code(self, num: int):
+        # Codes are their number converted to base <color count> and zero padded to meet the code length
+        human_readable = [0]*self.code_length
+        for i in reversed(range(self.code_length)):
+            human_readable[i] = num%self.color_count
+            num = num//self.color_count
+        return " ".join([str(elem) for elem in human_readable])
+
+    def code_to_num(self, code: str):
+        list_format = [int(x) for x in code.split(" ")]
+        num = 0
+        for x in list_format:
+            num *= self.color_count
+            num += x
+        return num
+
+    def wrapper(self):
+        while True:
+            best_guess = self.optimal_guess()
+            print(f"Recommended Guess: {self.num_to_code(best_guess)}")
+            made_guess = input("Your Guess: ")
+            response = input("Response Received: ")
+            if response == f"{self.code_length}-0":
+                break
+            self.update_possibilities(self.code_to_num(made_guess), response)
 
 if __name__=="__main__":
-    temp = Agent()
+    ai = Agent()
+    ai.wrapper()
