@@ -1,6 +1,9 @@
 from connection_calculations import minimax_structure
 import os.path
 import json
+import matplotlib.pyplot as plt
+from matplotlib import colors
+import numpy as np
 
 class Agent:
     def __init__(self, code_length=4, color_count=6, max_guesses=10) -> None:
@@ -86,8 +89,27 @@ class Agent:
             num += x
         return num
 
+    def visualize_state(self):
+        valid = np.array([(x is not None)*1 for x in self.search_structure])
+        vertical_digits = self.code_length//2
+        horizontal_digits = self.code_length-vertical_digits
+        vertical_length = self.color_count**vertical_digits
+        horizontal_length = self.color_count**horizontal_digits
+        valid = np.reshape(valid, (vertical_length, -1))
+
+        cmap = colors.ListedColormap(['red', 'green'])
+        fig, ax = plt.subplots()
+        ax.imshow(valid, cmap=cmap)
+        ax.set_xticks(np.arange(-.5,horizontal_length-.5,1))
+        ax.set_xticklabels([])
+        ax.set_yticks(np.arange(-.5,vertical_length-.5,1))
+        ax.set_yticklabels([])
+        ax.grid(which="both", linestyle="-", color="k", linewidth=1)
+        plt.show()
+
     def wrapper(self):
         while True:
+            self.visualize_state()
             best_guess = self.optimal_guess()
             print(f"Recommended Guess: {self.num_to_code(best_guess)}")
             made_guess = input("Your Guess: ")
